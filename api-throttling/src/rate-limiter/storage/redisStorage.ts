@@ -4,8 +4,18 @@ import { StorageStrategy } from "./storageStrategy";
 export class RedisStorage implements StorageStrategy {
   private client: Redis;
 
-  constructor(redisUrl: string = process.env.REDIS_URL || "redis://localhost:6379") {
-    this.client = new Redis(redisUrl);
+  constructor() {
+    this.client = new Redis({
+      host: process.env.REDIS_HOST || "127.0.0.1",
+      port: Number(process.env.REDIS_PORT) || 6379,
+      lazyConnect: true, // Maakt pas verbinding bij het eerste Redis-verzoek
+      enableOfflineQueue: false, // Voorkomt dat verzoeken blijven hangen als Redis offline is
+    });
+
+    // Vang verbindingsfouten netjes op zonder dat de app crasht
+    this.client.on("error", (err) => {
+      // Stilzwijgend negeren of loggen wanneer Redis niet bereikbaar is
+    });
   }
 
   async get(key: string): Promise<string | null> {
