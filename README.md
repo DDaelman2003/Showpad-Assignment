@@ -138,3 +138,10 @@ docker compose up --build
 ```
 
 De API is nu bereikbaar op `http://localhost:3000`.
+
+## Live Demo (Cloud Deployment)
+Je kunt deze service direct testen via de cloud-deployment:
+- **Base URL:** `https://api-trottling-service.onrender.com/`
+- **Voorbeeld cURL:**
+  ```bash
+  curl -i -H "Authorization: bearer client-tier-basic" [https://api-trottling-service.onrender.com/foo](https://api-trottling-service.onrender.com/foo)
