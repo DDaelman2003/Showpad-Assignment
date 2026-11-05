@@ -4,7 +4,7 @@ Een robuuste, productie-klare TypeScript API die rate-limiting en API-throttling
 
 ---
 
-## 🚀 Kernfunctionaliteiten
+## Kernfunctionaliteiten
 
 - **Twee Verschillende Endpoints & Algoritmes:**
   - `GET /foo`: Maakt gebruik van het **Fixed Window** algoritme (telt het aantal requests binnen een vast tijdvenster per client).
@@ -19,7 +19,7 @@ Een robuuste, productie-klare TypeScript API die rate-limiting en API-throttling
 
 ---
 
-## 🔍 Handleiding voor Code Reviewers
+## Handleiding voor Code Reviewers
 
 Beste reviewer, bedankt voor het evalueren van deze opdracht! Om je te helpen snel door de codebase te navigeren en de functionaliteit te verifiëren, vind je hieronder een gerichte handleiding.
 
@@ -78,7 +78,7 @@ curl -i -H "Authorization: bearer client-tier-basic" -H "x-storage-type: redis" 
 
 ---
 
-## 🛠️ Projectstructuur
+## Projectstructuur
 
 ```text
 api-throttling/
@@ -89,7 +89,6 @@ api-throttling/
 │   │   ├── algorithms/  # Fixed Window & Token Bucket implementaties
 │   │   ├── storage/     # Memory en Redis storage adapters
 │   │   └── rateLimiterMiddleware.ts
-│   ├── routes/          # /foo en /bar route handlers
 │   └── app.ts           # Express applicatie setup
 ├── tests/               # Jest unittests
 ├── jest.config.js
@@ -102,7 +101,7 @@ api-throttling/
 
 ---
 
-## 📋 Installatie & Starten
+## Installatie & Starten
 
 ### Optie 1: Lokaal draaien (Node.js)
 
@@ -139,5 +138,3 @@ docker compose up --build
 ```
 
 De API is nu bereikbaar op `http://localhost:3000`.
-
-```
