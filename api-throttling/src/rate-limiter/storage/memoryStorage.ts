@@ -28,6 +28,7 @@ export class MemoryStorage implements StorageStrategy {
   }
 
   async hgetall(key: string): Promise<Record<string, string>> {
+    console.log(`[IN-MEMORY STORAGE] Hgetall aangeroepen voor: ${key}`);
     const item = this.store.get(key);
     if (!item) return {};
     if (item.expiresAt && Date.now() > item.expiresAt) {
@@ -38,6 +39,7 @@ export class MemoryStorage implements StorageStrategy {
   }
 
   async hmset(key: string, data: Record<string, string>, ttlMs?: number): Promise<void> {
+    console.log(`[IN-MEMORY STORAGE] Hmset aangeroepen voor: ${key}`);
     const expiresAt = ttlMs ? Date.now() + ttlMs : undefined;
     this.store.set(key, { value: data, expiresAt });
   }

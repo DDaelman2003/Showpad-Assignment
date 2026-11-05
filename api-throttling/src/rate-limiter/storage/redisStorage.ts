@@ -17,17 +17,77 @@ export class RedisStorage implements StorageStrategy {
       // Stilzwijgend opvangen om unhandled error events te voorkomen
     });
   }
-  get(key: string): Promise<string | null> {
-    throw new Error("Method not implemented.");
+
+  async hmset(key: string, data: Record<string, string>, ttlSeconds?: number): Promise<void> {
+    try {
+      if (this.client.status !== "ready" && this.client.status !== "connecting") {
+        await this.client.connect().catch(() => {});
+      }
+      await this.client.hset(key, data);
+      if (ttlSeconds) {
+        await this.client.expire(key, ttlSeconds);
+      }
+    } catch (error) {
+      console.error("Redis hmset error:", error);
+      throw new Error("Redis storage is tijdelijk onbereikbaar");
+    }
   }
-  set(key: string, value: string, ttlMs?: number): Promise<void> {
-    throw new Error("Method not implemented.");
+
+  async get(key: string): Promise<string | null> {
+    try {
+      if (this.client.status !== "ready" && this.client.status !== "connecting") {
+        await this.client.connect().catch(() => {});
+      }
+      return await this.client.get(key);
+    } catch (error) {
+      console.error("Redis get error:", error);
+      throw new Error("Redis storage is tijdelijk onbereikbaar");
+    }
   }
-  hgetall(key: string): Promise<Record<string, string>> {
-    throw new Error("Method not implemented.");
+
+  async set(key: string, value: string, ttlSeconds?: number): Promise<void> {
+    try {
+      if (this.client.status !== "ready" && this.client.status !== "connecting") {
+        await this.client.connect().catch(() => {});
+      }
+      if (ttlSeconds) {
+        await this.client.set(key, value, "EX", ttlSeconds);
+      } else {
+        await this.client.set(key, value);
+      }
+    } catch (error) {
+      console.error("Redis set error:", error);
+      throw new Error("Redis storage is tijdelijk onbereikbaar");
+    }
   }
-  hmset(key: string, data: Record<string, string>, ttlMs?: number): Promise<void> {
-    throw new Error("Method not implemented.");
+  
+  async hgetall(key: string): Promise<Record<string, string>> {
+    console.log(`[REDIS STORAGE] Hgetall aangeroepen voor: ${key}`);
+    try {
+      if (this.client.status !== "ready" && this.client.status !== "connecting") {
+        await this.client.connect().catch(() => {});
+      }
+      return await this.client.hgetall(key);
+    } catch (error) {
+      console.error("Redis hgetall error:", error);
+      throw new Error("Redis storage is tijdelijk onbereikbaar");
+    }
+  }
+
+  async hset(key: string, data: Record<string, any>, ttlSeconds?: number): Promise<void> {
+    console.log(`[REDIS STORAGE] Hset aangeroepen voor: ${key}`);
+    try {
+      if (this.client.status !== "ready" && this.client.status !== "connecting") {
+        await this.client.connect().catch(() => {});
+      }
+      await this.client.hset(key, data);
+      if (ttlSeconds) {
+        await this.client.expire(key, ttlSeconds);
+      }
+    } catch (error) {
+      console.error("Redis hset error:", error);
+      throw new Error("Redis storage is tijdelijk onbereikbaar");
+    }
   }
 
   async incr(key: string, windowMs: number): Promise<number> {
