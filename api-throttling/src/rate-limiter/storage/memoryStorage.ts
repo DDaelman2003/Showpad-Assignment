@@ -19,6 +19,7 @@ export class MemoryStorage implements StorageStrategy {
   }
 
   async incr(key: string, ttlMs?: number): Promise<number> {
+    console.log(`[IN-MEMORY STORAGE] Sleutel verhoogd: ${key}`);
     const current = await this.get(key);
     const count = current ? parseInt(current, 10) + 1 : 1;
     const expiresAt = ttlMs ? Date.now() + ttlMs : undefined;

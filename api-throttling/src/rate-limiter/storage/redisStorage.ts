@@ -31,6 +31,7 @@ export class RedisStorage implements StorageStrategy {
   }
 
   async incr(key: string, windowMs: number): Promise<number> {
+    console.log(`[REDIS STORAGE] Sleutel verhoogd: ${key}`);
     try {
       if (this.client.status !== "ready" && this.client.status !== "connecting") {
         await this.client.connect().catch(() => {});
